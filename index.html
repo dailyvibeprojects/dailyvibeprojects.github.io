@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dailyvibeprojects.github.io — Projects of questionable necessity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --bg2: #ede8dc;
+    --ink: #1a1a18;
+    --muted: #5a5650;
+    --accent: #c0392b;
+    --accent2: #2471a3;
+    --accent3: #1e8449;
+    --yellow: #f4c842;
+    --border: #c4bfb2;
+    --card-bg: #fffdf7;
+    --stamp-red: #c0392b;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--bg);
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, var(--border) 27px, var(--border) 28px),
+      repeating-linear-gradient(90deg, transparent, transparent 27px, rgba(196,191,178,0.3) 27px, rgba(196,191,178,0.3) 28px);
+    font-family: 'Courier Prime', 'Courier New', monospace;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  .noise {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  .wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    position: relative; z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border: 3px double var(--ink);
+    background: var(--card-bg);
+    padding: 2rem 2rem 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  header::before {
+    content: "⚠ NOT SUITABLE FOR PERFORMANCE REVIEWS ⚠";
+    display: block;
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 0.5rem;
+  }
+
+  .site-title {
+    font-family: 'VT323', monospace;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 1;
+    letter-spacing: -1px;
+    color: var(--ink);
+  }
+
+  .site-title span {
+    color: var(--accent);
+  }
+
+  .tagline {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.6rem;
+    font-style: italic;
+  }
+
+  .header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border);
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .header-meta span::before { content: "► "; color: var(--accent); }
+
+  .stamp {
+    position: absolute;
+    top: 1.2rem; right: 1.5rem;
+    border: 3px solid var(--stamp-red);
+    color: var(--stamp-red);
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    padding: 4px 8px;
+    letter-spacing: 2px;
+    transform: rotate(12deg);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  /* ── NOTICE BANNER ── */
+  .notice {
+    background: var(--yellow);
+    border: 2px solid var(--ink);
+    padding: 0.75rem 1.25rem;
+    font-size: 0.82rem;
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .notice-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── SECTION HEADERS ── */
+  .section-label {
+    font-family: 'VT323', monospace;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .section-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── PROJECT GRID ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 2px solid var(--ink);
+    padding: 1.25rem;
+    position: relative;
+    transition: transform 0.1s, box-shadow 0.1s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .card-corner {
+    position: absolute;
+    top: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 28px 28px 0;
+    border-color: transparent var(--bg2) transparent transparent;
+  }
+
+  .card-badge {
+    display: inline-block;
+    font-family: 'VT323', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border: 1px solid currentColor;
+    margin-bottom: 0.6rem;
+  }
+
+  .badge-tool   { color: var(--accent2); }
+  .badge-game   { color: var(--accent3); }
+  .badge-script { color: var(--accent); }
+  .badge-misc   { color: #7d3c98; }
+
+  .card-title {
+    font-family: 'VT323', monospace;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+
+  .card-origin {
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  .card-footer {
+    margin-top: 0.9rem;
+    padding-top: 0.6rem;
+    border-top: 1px dashed var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+  }
+
+  .card-link-label {
+    color: var(--accent2);
+    text-decoration: underline;
+    font-weight: 700;
+  }
+
+  /* ── STAR RATING ── */
+  .stars { color: var(--yellow); letter-spacing: -1px; }
+  .stars-label { color: var(--muted); }
+
+  /* ── STATUS TAG ── */
+  .status {
+    display: inline-block;
+    font-family: 'VT323', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    padding: 1px 6px;
+    border-radius: 0;
+  }
+  .status-wip   { background: var(--yellow); color: var(--ink); }
+  .status-done  { background: #d5f5e3; color: var(--accent3); border: 1px solid var(--accent3); }
+  .status-abandoned { background: #fde8e8; color: var(--accent); border: 1px solid var(--accent); }
+
+  /* ── ADD YOUR OWN CARD ── */
+  .card-add {
+    border-style: dashed;
+    border-color: var(--border);
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 180px;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+  }
+
+  .card-add .plus {
+    font-family: 'VT323', monospace;
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--border);
+  }
+
+  .card-add:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0 var(--accent2);
+  }
+  .card-add:hover .plus { color: var(--accent2); }
+
+  /* ── ABOUT SECTION ── */
+  .about-box {
+    background: var(--card-bg);
+    border: 2px solid var(--ink);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    position: relative;
+  }
+
+  .about-box p + p { margin-top: 0.75rem; }
+
+  .typing-cursor::after {
+    content: "█";
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 2px solid var(--ink);
+    padding-top: 1rem;
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  footer a { color: var(--accent2); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card { animation: fadeSlideIn 0.35s ease both; }
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.12s; }
+  .card:nth-child(3) { animation-delay: 0.18s; }
+  .card:nth-child(4) { animation-delay: 0.24s; }
+  .card:nth-child(5) { animation-delay: 0.30s; }
+  .card:nth-child(6) { animation-delay: 0.36s; }
+  .card:nth-child(7) { animation-delay: 0.42s; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border: 1px solid var(--ink); }
+
+  @media (max-width: 500px) {
+    .projects-grid { grid-template-columns: 1fr; }
+    .site-title { font-size: 2.8rem; }
+  }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="wrapper">
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="stamp">VIBECODED</div>
+    <div class="site-title">dailyvibe<span>projects</span></div>
+    <p class="tagline">// shipping questionable software.</p>
+    <div class="header-meta">
+      <span>Est. 2026</span>
+      <span>Runs on craft beer &amp; bad ideas</span>
+      <span>0 unit tests</span>
+      <span>Dunder Mifflin IT dept. disapproves</span>
+    </div>
+  </header>
+
+  <!-- ── NOTICE BANNER ── -->
+  <div class="notice">
+    <span class="notice-icon">📎</span>
+    <span>
+      <strong>Hi, I'm Clippy — did you know</strong> that none of these projects were required by your job?
+      It looks like you're trying to automate something nobody asked you to automate.
+      Would you like help? <em>(You're getting it anyway.)</em>
+    </span>
+  </div>
+
+  <!-- ── ABOUT ── -->
+  <div class="section-label">About this person</div>
+  <div class="about-box">
+    <p>
+      Welcome to my corner of the internet.
+    </p>
+    <p>
+      None of this is production-ready. Some of it runs. All of it made sense at the time.
+      Michael Scott once said <em>"Would I rather be feared or loved? Easy. Both. I want people to be afraid of how much they love me."</em>
+      I want people to be afraid of how much I committed to a joke codebase.
+    </p>
+    <p>
+      Feel free to poke around. If something is broken, that's a feature. If you find a bug, congrats —
+      you've been appointed QA. There is no salary.
+    </p>
+  </div>
+
+  <!-- ── PROJECTS ── -->
+  <div class="section-label">The Projects™</div>
+  <div class="projects-grid">
+
+    <!-- Project 1 -->
+    <a class="card" href="https://dailyvibeprojects.github.io/shusher/">
+      <div class="card-corner"></div>
+      <div><span class="card-badge badge-tool">[ TOOL ]</span></div>
+      <div class="card-title">The Auto-Shusher</div>
+      <div class="card-origin">
+        📍 Origin: A noisy day at the office
+      </div>
+      <p class="card-desc">
+      It allows you to monitor your surroundings and automatically alert your noisy neighbours. Perfect for open spaces and meetings when people like yelling more than listening.
+      </p>
+      <div class="card-footer">
+        <span class="status status-done">SHIPPED</span>
+        <span>
+          <span class="stars">★★★★★</span>
+          <span class="stars-label">most useful thing I made</span>
+        </span>
+        <span class="card-link-label">visit →</span>
+      </div>
+    </a>
+
+    <!--
+    <!- - Project 2 - ->
+    <a class="card" href="/beerlog">
+      <div class="card-corner"></div>
+      <div><span class="card-badge badge-misc">[ MISC ]</span></div>
+      <div class="card-title">beerlog</div>
+      <div class="card-origin">
+        🍺 Origin: post-sprint pub, "there should be an app for this"
+      </div>
+      <p class="card-desc">
+        CLI tool to log beers by brewery, style, and "quality of idea consumed during."
+        Exports to JSON, CSV, or a strongly-worded letter to future-you.
+        v2 adds a regret index.
+      </p>
+      <div class="card-footer">
+        <span class="status status-wip">WIP</span>
+        <span>
+          <span class="stars">★★★☆☆</span>
+          <span class="stars-label"> depends on beer</span>
+        </span>
+        <span class="card-link-label">visit →</span>
+      </div>
+    </a>
+
+    <!- - Project 3 - ->
+    <a class="card" href="/coffeewatch">
+      <div class="card-corner"></div>
+      <div><span class="card-badge badge-script">[ SCRIPT ]</span></div>
+      <div class="card-title">coffeewatch</div>
+      <div class="card-origin">
+        ☕ Origin: third cup of the morning, 9:04am
+      </div>
+      <p class="card-desc">
+        Raspberry Pi + camera watching the office coffee machine. Sends a push
+        notification when the pot is fresh. Also logs "coffee crimes" (people who
+        take the last cup and don't make more). Shame leaderboard included.
+      </p>
+      <div class="card-footer">
+        <span class="status status-done">SHIPPED</span>
+        <span>
+          <span class="stars">★★★★★</span>
+          <span class="stars-label"> most useful thing I made</span>
+        </span>
+        <span class="card-link-label">visit →</span>
+      </div>
+    </a>
+
+    <!- - Project 4 - ->
+    <a class="card" href="/npc-manager">
+      <div class="card-corner"></div>
+      <div><span class="card-badge badge-game">[ GAME ]</span></div>
+      <div class="card-title">npc-manager</div>
+      <div class="card-origin">
+        🎮 Origin: Skyrim merchant respawn frustration, 11pm
+      </div>
+      <p class="card-desc">
+        Skyrim mod that gives merchants actual business logic.
+        They now track inventory, complain about supply chains, and occasionally
+        go on strike. One merchant now has a full 401(k). This is canon.
+      </p>
+      <div class="card-footer">
+        <span class="status status-done">SHIPPED</span>
+        <span>
+          <span class="stars">★★★★☆</span>
+          <span class="stars-label"> nexusmods approved</span>
+        </span>
+        <span class="card-link-label">visit →</span>
+      </div>
+    </a>
+
+    <!- - Project 5 - ->
+    <a class="card" href="/prbot">
+      <div class="card-corner"></div>
+      <div><span class="card-badge badge-script">[ SCRIPT ]</span></div>
+      <div class="card-title">prbot</div>
+      <div class="card-origin">
+        💬 Origin: code review that started with "great work but..."
+      </div>
+      <p class="card-desc">
+        GitHub bot that reviews your PRs in the style of famous fictional managers.
+        Choose from: Michael Scott (enthusiastic, no notes), Ron Swanson
+        (one word: approved), or Gordon Ramsay (brutal, but correct).
+      </p>
+      <div class="card-footer">
+        <span class="status status-done">SHIPPED</span>
+        <span>
+          <span class="stars">★★★★★</span>
+          <span class="stars-label"> team loves it</span>
+        </span>
+        <span class="card-link-label">visit →</span>
+      </div>
+    </a>
+
+    <!- - Project 6 - ->
+    <a class="card" href="/standup-bot">
+      <div class="card-corner"></div>
+      <div><span class="card-badge badge-tool">[ TOOL ]</span></div>
+      <div class="card-title">standup-bot</div>
+      <div class="card-origin">
+        📋 Origin: 9am Monday, eyes not yet open
+      </div>
+      <p class="card-desc">
+        Generates plausible standup updates from your git log. Optionally adds
+        "blocked by external dependency" (meaning: I haven't started yet).
+        Dwight-approved. Has never been caught.
+      </p>
+      <div class="card-footer">
+        <span class="status status-wip">WIP</span>
+        <span>
+          <span class="stars">★★★☆☆</span>
+          <span class="stars-label"> suspiciously accurate</span>
+        </span>
+        <span class="card-link-label">visit →</span>
+      </div>
+    </a>
+
+    <!- - Project 7 - ->
+    <a class="card" href="/dungeon-budget">
+      <div class="card-corner"></div>
+      <div><span class="card-badge badge-game">[ GAME ]</span></div>
+      <div class="card-title">dungeon-budget</div>
+      <div class="card-origin">
+        🗡️ Origin: D&amp;D session, three beers in, arguing about gold
+      </div>
+      <p class="card-desc">
+        Spreadsheet-as-a-webapp for D&amp;D party finances. Tracks gold, debts,
+        who "borrowed" the healing potions, and passive-aggressive notes from the
+        paladin. Full audit trail. Rogues hate it.
+      </p>
+      <div class="card-footer">
+        <span class="status status-abandoned">ABANDONED*</span>
+        <span>
+          <span class="stars">★★☆☆☆</span>
+          <span class="stars-label"> campaign ended</span>
+        </span>
+        <span class="card-link-label">visit →</span>
+      </div>
+    </a>
+    -->
+
+    <!-- Add project card -->
+    <div class="card card-add" onclick="alert('Edit index.html and add a new project card! It\'ll take 20 minutes. (It won\'t take 20 minutes.)')">
+      <span class="plus">+</span>
+      <span>add a project</span>
+      <span style="font-size:0.65rem; margin-top:4px; max-width: 160px; text-align:center; line-height:1.4;">(it will take "just a weekend")</span>
+    </div>
+
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <span>Made with ☕ + 🍺 + too many browser tabs</span>
+    <span>*abandoned = "will definitely get back to it"</span>
+    <span>
+      <a href="https://github.com/dailyvibeprojects">github</a>
+      &nbsp;·&nbsp;
+      Not affiliated with Dunder Mifflin Paper Co.
+    </span>
+  </footer>
+
+</div>
+</body>
+</html>
